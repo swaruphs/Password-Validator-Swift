@@ -77,4 +77,14 @@ class Password_Validator_Tests: XCTestCase {
         let validator = PasswordValidator.init(rules: [.Digit])
         XCTAssert(validator.isValid(password: "hello") == false)
     }
+    
+    func testPasswordHasSpecialCharactersValid() {
+        let validator = PasswordValidator.init(rules: [.SpecialCharacter])
+        XCTAssert(validator.isValid(password: "Hello$$") == true)
+    }
+    
+    func testPasswordHasSpecialCharactersInvalid() {
+        let validator = PasswordValidator.init(rules: [.SpecialCharacter])
+        XCTAssert(validator.isValid(password: "Hello") == false)
+    }
 }

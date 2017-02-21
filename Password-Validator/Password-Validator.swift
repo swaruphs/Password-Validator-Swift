@@ -14,6 +14,20 @@ public enum ValidationRules {
     case LowerCase
     case Digit
     case SpecialCharacter
+    
+    fileprivate var characterSet:CharacterSet {
+        switch self {
+        case .UpperCase:
+            return NSCharacterSet.uppercaseLetters
+        case .LowerCase:
+            return NSCharacterSet.lowercaseLetters
+        case .Digit:
+            return NSCharacterSet.decimalDigits
+        case .SpecialCharacter:
+            return NSCharacterSet.symbols
+        }
+        
+    }
 }
 
 
@@ -45,45 +59,18 @@ public struct PasswordValidator {
         }
         
         for rule in self.rules {
-            switch rule {
-            case .LowerCase:
-                
-                let lowercase = NSCharacterSet.lowercaseLetters
-                let hasLower = pwdString.unicodeScalars.contains { ( u: UnicodeScalar) -> Bool in
-                    lowercase.contains(u)
-                }
-                
-                if hasLower == false {
-                    return false
-                }
-            case .UpperCase:
-                let uppercase = NSCharacterSet.uppercaseLetters
-                let hasUpper = pwdString.unicodeScalars.contains { ( u: UnicodeScalar) -> Bool in
-                    uppercase.contains(u)
-                }
-                
-                if hasUpper == false {
-                    return false
-                }
-            case .Digit:
-                let digit = NSCharacterSet.decimalDigits
-                let hasDigit = pwdString.unicodeScalars.contains {( u: UnicodeScalar) -> Bool in
-                    digit.contains(u)
-                }
-                
-                if hasDigit == false {
-                    return false
-                }
-                
-                
-            default:
-                break
+            
+            let hasMember = pwdString.unicodeScalars.contains { ( u: UnicodeScalar) -> Bool in
+                rule.characterSet.contains(u)
             }
+            
+            if hasMember == false {
+                return false
+            }
+            
         }
         
         return true
-        
-        
         
     }
 }
